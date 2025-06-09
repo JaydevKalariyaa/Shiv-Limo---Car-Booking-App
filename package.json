@@ -13,6 +13,7 @@
     "migrate:down": "migrate-mongo down",
     "migrate:status": "migrate-mongo status",
     "dev": "nodemon index.js",
+    "start": "node index.js",
     "seed": "node seeders/bookingSeeder.js"
   },
   "dependencies": {
