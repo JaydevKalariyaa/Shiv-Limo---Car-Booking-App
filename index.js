@@ -12,11 +12,16 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.error("Connection error:", err));
 
 // Middleware
-app.use(cors({
-    origin: 'http://localhost:5173', // Your frontend URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === "production"
+        ? process.env.FRONTEND_URL
+        : "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 
 // Routes

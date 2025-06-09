@@ -14,6 +14,7 @@
     "migrate:status": "migrate-mongo status",
     "dev": "nodemon index.js",
     "start": "node index.js",
+    "build": "echo 'No build step required'",
     "seed": "node seeders/bookingSeeder.js"
   },
   "dependencies": {
