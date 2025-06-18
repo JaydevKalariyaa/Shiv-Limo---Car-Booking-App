@@ -25,21 +25,54 @@ const ownerBookingTemplate = (booking) => `
 
                             <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
                                 ${[
-                                    { label: 'Customer Name', value: booking.customerName },
-                                    { label: 'Phone Number', value: booking.customerPhone },
-                                    { label: 'Email', value: booking.customerEmail },
-                                    { label: 'Car Type', value: booking.carType },
-                                    { label: 'Pickup Location', value: booking.pickupLocation },
-                                    { label: 'Drop Location', value: booking.dropLocation },
-                                    { label: 'Date & Time', value: new Date(booking.bookingDateTime).toLocaleString() },
-                                    booking.note ? { label: 'Note', value: booking.note } : null
+                                  {
+                                    label: "Customer Name",
+                                    value: booking.customerName,
+                                  },
+                                  {
+                                    label: "Phone Number",
+                                    value: booking.customerPhone,
+                                  },
+                                  {
+                                    label: "Email",
+                                    value: booking.customerEmail,
+                                  },
+                                  { label: "Car Type", value: booking.carType },
+                                  {
+                                    label: "Pickup Location",
+                                    value: booking.pickupLocation,
+                                  },
+                                  {
+                                    label: "Drop Location",
+                                    value: booking.dropLocation,
+                                  },
+                                  {
+                                    label: "Date & Time",
+                                    value: new Date(
+                                      booking.bookingDateTime
+                                    ).toLocaleString(),
+                                  },
+                                  {
+                                    label: "Estimated Fare",
+                                    value: booking.estimatedFare
+                                      ? `${parseFloat(
+                                          booking.estimatedFare
+                                        ).toFixed(2)} $`
+                                      : "Not Available",
+                                  },
+                                  booking.note
+                                    ? { label: "Note", value: booking.note }
+                                    : null,
                                 ]
-                                .filter(Boolean)
-                                .map(item => `
+                                  .filter(Boolean)
+                                  .map(
+                                    (item) => `
                                 <tr style="border-bottom:1px solid #e8eaed;">
                                     <td style="padding:12px 20px; font-weight:bold; color:#202124; width:150px;">${item.label}:</td>
                                     <td style="padding:12px 20px; color:#202124;">${item.value}</td>
-                                </tr>`).join('')}
+                                </tr>`
+                                  )
+                                  .join("")}
                             </table>
 
                             <!-- Call Now Button -->
