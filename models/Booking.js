@@ -31,13 +31,27 @@ const bookingSchema = new mongoose.Schema({
     required: [true, "Booking date is required"],
   },
   estimatedFare: {
-    type: String,
+    type: Number,
   },
 
   status: {
     type: String,
-    enum: ["pending", "confirmed", "cancelled"],
+    enum: ["pending", "confirmed", "cancelled", "paid"],
     default: "pending",
+  },
+
+  paymentStatus: {
+    type: String,
+    enum: ["pending", "paid", "failed"],
+    default: "pending",
+  },
+
+  paymentIntentId: {
+    type: String,
+  },
+
+  stripePaymentId: {
+    type: String,
   },
 
   note: String,

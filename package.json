@@ -21,9 +21,12 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.1",
     "mongoose": "^8.15.1",
     "nodemailer": "^7.0.3",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "stripe": "^18.3.0"
   },
   "devDependencies": {
     "migrate-mongo": "^12.1.3"

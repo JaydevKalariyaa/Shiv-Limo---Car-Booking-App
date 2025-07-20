@@ -50,6 +50,42 @@ exports.createBooking = async (req, res) => {
     }
 };
 
+// Update booking with payment information
+exports.updateBookingPayment = async (req, res) => {
+    try {
+        const { bookingId, paymentIntentId, stripePaymentId } = req.body;
+        
+        const booking = await Booking.findByIdAndUpdate(
+            bookingId,
+            {
+                paymentStatus: 'paid',
+                paymentIntentId,
+                stripePaymentId,
+                status: 'paid'
+            },
+            { new: true }
+        );
+
+        if (!booking) {
+            return res.status(404).json({
+                success: false,
+                error: 'Booking not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: booking,
+            message: 'Payment updated successfully'
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            error: error.message
+        });
+    }
+};
+
 // Get all bookings
 exports.getBookings = async (req, res) => {
     try {

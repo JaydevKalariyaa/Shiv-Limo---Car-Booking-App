@@ -6,12 +6,12 @@ const app = express();
 
 // Import routes
 const bookingRoutes = require('./routes/bookingRoutes');
+const stripeRoutes = require("./routes/stripeRoutes");
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
-  .catch(err => console.error("Connection error:", err));
-
-
+  .catch((err) => console.error("Connection error:", err));
 
 // Middleware
 app.use(
@@ -27,7 +27,8 @@ app.use(
 app.use(express.json());
 
 // Routes
-app.use('/api/bookings', bookingRoutes);
+app.use("/api/bookings", bookingRoutes);
+app.use("/api/stripe", stripeRoutes);
 
 // Health check endpoint
 app.get("/ping", async (req, res) => {
