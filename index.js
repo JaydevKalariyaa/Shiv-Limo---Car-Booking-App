@@ -1,17 +1,17 @@
 require("dotenv").config();
-const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
+const { connectToDatabase, isDatabaseConnected } = require("./config/database");
 const app = express();
 
 // Import routes
-const bookingRoutes = require('./routes/bookingRoutes');
+const bookingRoutes = require("./routes/bookingRoutes");
 const stripeRoutes = require("./routes/stripeRoutes");
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("Connection error:", err));
+// Initialize database connection
+connectToDatabase()
+  .then(() => console.log("Database connection initialized"))
+  .catch((err) => console.error("Database connection error:", err));
 
 // Middleware
 app.use(
@@ -26,13 +26,44 @@ app.use(
 );
 app.use(express.json());
 
+// Database connection middleware
+app.use(async (req, res, next) => {
+  try {
+    // Ensure database is connected before processing requests
+    if (!isDatabaseConnected()) {
+      console.log("Database not connected, attempting to reconnect...");
+      await connectToDatabase();
+    }
+    next();
+  } catch (error) {
+    console.error("Database connection middleware error:", error);
+    res.status(503).json({
+      success: false,
+      error: "Database connection error. Please try again.",
+    });
+  }
+});
+
 // Routes
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/stripe", stripeRoutes);
 
 // Health check endpoint
 app.get("/ping", async (req, res) => {
-  res.json({ message: "pong" });
+  try {
+    const dbConnected = isDatabaseConnected();
+    res.json({
+      message: "pong",
+      database: dbConnected ? "connected" : "disconnected",
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "error",
+      error: error.message,
+      timestamp: new Date().toISOString(),
+    });
+  }
 });
 
 // Error handling middleware
@@ -40,7 +71,7 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
     success: false,
-    error: 'Something went wrong!'
+    error: "Something went wrong!",
   });
 });
 
